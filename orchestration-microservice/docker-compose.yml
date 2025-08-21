@@ -1,0 +1,32 @@
+version: "3.9"
+
+services:
+  flower:
+    image: mher/flower
+    container_name: flower
+    environment:
+      - CELERY_BROKER_URL=redis://microservice-redis:6379/0
+      - CELERY_BACKEND_URL=redis://microservice-redis:6379/1
+    ports:
+      - "5555:5555"
+    networks:
+      - shared-net
+
+  orchestration-api:
+    build: .
+    container_name: orchestration-api
+    ports:
+      - "8000:8000"
+    networks:
+      - shared-net
+
+  orchestration-worker:
+    build: .
+    container_name: orchestration-worker
+    command: celery -A src.celery_app.celery_app worker -Q orchestration_queue -l info
+    networks:
+      - shared-net
+
+networks:
+  shared-net:
+    external: true

@@ -1,11 +1,11 @@
 version: '3.9'
 
 services:
-  split-service:
+  nlp-service:
     build:
       context: ./
       dockerfile: Dockerfile
-    container_name: transcription-service
+    container_name: nlp-service
     command: [ "python", "worker.py" ]
     networks:
       - shared-net

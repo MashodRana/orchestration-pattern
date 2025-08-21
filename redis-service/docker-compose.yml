@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  microservice-redis:
+    image: redis:7-alpine
+    ports:
+      - "6380:6379"
+    networks:
+      - shared-net
+    restart: unless-stopped
+
+networks:
+  shared-net:
+    external: true
